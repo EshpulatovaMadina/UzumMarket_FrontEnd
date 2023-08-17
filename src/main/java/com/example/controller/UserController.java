@@ -6,6 +6,7 @@ import com.example.model.UserResponseDTO;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,13 +37,32 @@ public class UserController {
     @GetMapping("/sign-in")
     public String signIn
             (
-                    @ModelAttribute SignInDTO dto
+                    @ModelAttribute SignInDTO dto,
+                    Model model
             )
 
     {
         UserResponseDTO userResponseDTO = userService.signIn(dto);
-        System.out.println("userResponseDTO = " + userResponseDTO);
-        return "index";
+        if(userResponseDTO == null){
+            return "index";
+        }else {
+            model.addAttribute("user",userResponseDTO);
+
+            switch (userResponseDTO.getUserRole()) {
+                case "USER"-> {
+                    return "user/menu";
+                }
+                case "ADMIN" -> {
+                    return "admin/menu";
+                }
+                case "SELLER" -> {
+                    return "seller/menu";
+                }
+                default -> {
+                    return "index";
+                }
+            }
+        }
     }
 
     @GetMapping("/sign-in-get")
