@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+</head>
+       <body>
+
+       <h1>User Information</h1>
+
+       <p>User's First Name: <span th:text="${user.firstName}">First Name</span></p>
+       <p>User's Last Name: <span th:text="${user.lastName}">Last Name</span></p>
+       <p>User's Birthday: <span th:text="${user.birthDate}">Birthday</span></p>
+       <p>User's Age: <span th:text="${user.email}">Age</span></p>
+
+       <a href="/category/get">Categories</a>
+       <a href="/user/profile/${}">Profile</a>
+       <form action="/product/search">
+           <label>🔍</label>
+           <input type="text" name="word" placeholder="search"  required title="Enter product name or category name">
+           <button type="submit">Search</button>
+       </form>
+       <a href=""></a>
+
+       </body>
+</html>
