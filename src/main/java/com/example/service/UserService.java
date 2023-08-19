@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -38,6 +40,17 @@ public class UserService {
                 backendHost + "/user/sign-in",
                 HttpMethod.POST,
                 dtoHttpEntity,
+                UserResponseDTO.class
+        );
+        return exchange.getBody();
+    }
+
+    public UserResponseDTO getById(UUID Id) {
+        HttpEntity<UUID> userId =  new HttpEntity<>(Id);
+        ResponseEntity<UserResponseDTO> exchange = restTemplate.exchange(
+                backendHost + "/user/get-by-id",
+                HttpMethod.POST,
+                userId,
                 UserResponseDTO.class
         );
         return exchange.getBody();

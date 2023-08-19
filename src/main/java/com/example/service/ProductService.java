@@ -7,6 +7,7 @@ import org.springframework.asm.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +39,14 @@ public class ProductService {
         return "failed";
     }
 
-    public List<ProductResponseDTO> getAll(UUID sellerId) {
+    public Page<ProductResponseDTO> getAll(UUID sellerId) {
         HttpEntity<UUID> id = new HttpEntity<>(sellerId);
-        ResponseEntity<TypeReference> exchange = restTemplate.exchange(
+        ResponseEntity<Page<ProductResponseDTO>> exchange = restTemplate.exchange(
                 backendHost + "/product/get-all",
                 HttpMethod.GET,
                 id,
-                TypeReference.class
+                new ParameterizedTypeReference<Page<ProductResponseDTO>>() {} // Parametrizatsiya turi
         );
-        return (List<ProductResponseDTO>) exchange.getBody();
+        return  exchange.getBody();
     }
 }
