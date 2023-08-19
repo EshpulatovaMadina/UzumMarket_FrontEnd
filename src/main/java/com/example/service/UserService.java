@@ -24,9 +24,7 @@ public class UserService {
                 backendHost + "/user/add",
                 HttpMethod.POST,
                 userDTO,
-                UserResponseDTO.class
-
-        );
+                UserResponseDTO.class);
         System.out.println("exchange.getBody() = " + exchange.getBody());
 
         return "success";
