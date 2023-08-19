@@ -3,24 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Menu</title>
+    <link href="templates\styles\modal.css">
 </head>
-       <body>
+<body>
 
-       <h1>User Information</h1>
+<a href="/category/get">Categories</a>
+<a href="/basket/get">My basket</a>
+<a href="/order/get">Order</a>
+<br/>
+<a id="openProfileModal">Profile</a> <!-- Changed ID to openProfileModal -->
+<form action="/product/search">
+    <label>🔍</label>
+    <input type="text" name="word" placeholder="search" required title="Enter product name or category name">
+    <button type="submit">Search</button>
+</form>
 
-       <p>User's First Name: <span th:text="${user.firstName}">First Name</span></p>
-       <p>User's Last Name: <span th:text="${user.lastName}">Last Name</span></p>
-       <p>User's Birthday: <span th:text="${user.birthDate}">Birthday</span></p>
-       <p>User's Age: <span th:text="${user.email}">Age</span></p>
+<!-- Profile Modal -->
 
-       <a href="/category/get">Categories</a>
-       <a href="/user/profile/${}">Profile</a>
-       <form action="/product/search">
-           <label>🔍</label>
-           <input type="text" name="word" placeholder="search"  required title="Enter product name or category name">
-           <button type="submit">Search</button>
-       </form>
-       <a href=""></a>
+<div id="profileModal" class="modal" style="display: none;">
+    <div class="modal-content" style="border-radius: 5px; background-color: #545465">
+        <span class="close" style="float: right; cursor: pointer; margin-top: 10px">&times;</span>
+        <p>User's First Name: <span th:text="${user.firstName}">First Name</span></p>
+        <p>User's Last Name: <span th:text="${user.lastName}">Last Name</span></p>
+        <p>User's Birthday: <span th:text="${user.birthDate}">Birthday</span></p>
+        <p>User's Email: <span th:text="${user.email}">Email</span></p>
+    </div>
+</div>
 
-       </body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const openProfileModalButton = document.getElementById("openProfileModal");
+        const modal = document.getElementById("profileModal");
+        const closeButton = modal.querySelector(".close");
+
+        openProfileModalButton.addEventListener("click", function() {
+            modal.style.display = "block";
+        });
+
+        closeButton.addEventListener("click", function() {
+            modal.style.display = "none";
+        });
+
+        window.addEventListener("click", function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+</script>
+
+</body>
 </html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+         <body>
+         <a th:href="@{/category/get/{userId}(userId=${user.id})}">View Categories</a>
+
+         <table>
+             <thead>
+             <tr>
+                 <th>ID</th>
+                 <th>Name</th>
+                 <th>Price</th>
+             </tr>
+             </thead>
+             <tbody>
+             <tr th:each="product : ${products}">
+                 <td th:text="${product.name}"></td>
+                 <td th:text="${product.name}"></td>
+                 <td th:text="${product.price}"></td>
+             </tr>
+             </tbody>
+         </table>
+         </body>
+</html>
