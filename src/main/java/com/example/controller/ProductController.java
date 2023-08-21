@@ -37,7 +37,6 @@ public class ProductController {
                  List<UUID> list = attachmentService.multipleUpload((File) file);
                  dto.setPhotos(list);
                  productService.create(dto);
-
                  Page<ProductResponseDTO> products = productService.getAll(dto.getSellerId());
         model.addAttribute("products",products);
         return "seller/products";
