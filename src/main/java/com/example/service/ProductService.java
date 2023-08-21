@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.BaseResponse;
 import com.example.model.ProductCreateDTO;
 import com.example.model.ProductResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -27,13 +29,13 @@ public class ProductService {
 
     public String create (ProductCreateDTO dto){
         HttpEntity<ProductCreateDTO> dtoHttpEntity = new HttpEntity<>(dto);
-        ResponseEntity<ProductResponseDTO> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
                 backendHost + "/product/create",
                 HttpMethod.POST,
                 dtoHttpEntity,
-                ProductResponseDTO.class
+                BaseResponse.class
         );
-        if(exchange.getBody() == null){
+        if(Objects.requireNonNull(exchange.getBody()).getData() == null){
             return "success";
         }
         return "failed";
@@ -41,12 +43,12 @@ public class ProductService {
 
     public Page<ProductResponseDTO> getAll(UUID sellerId) {
         HttpEntity<UUID> id = new HttpEntity<>(sellerId);
-        ResponseEntity<Page<ProductResponseDTO>> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
                 backendHost + "/product/get-all",
                 HttpMethod.GET,
                 id,
-                new ParameterizedTypeReference<Page<ProductResponseDTO>>() {} // Parametrizatsiya turi
+                BaseResponse.class
         );
-        return  exchange.getBody();
+        return (Page<ProductResponseDTO>) exchange.getBody().getData();
     }
 }
