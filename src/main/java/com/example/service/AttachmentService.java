@@ -30,7 +30,7 @@ public class AttachmentService {
                 fileHttpEntity,
                 BaseResponse.class
         );
-        return exchange.getBody();
+        return (UUID) exchange.getBody().getData();
     }
     public List<UUID> multipleUpload(File file){
         HttpEntity<File> fileHttpEntity = new HttpEntity<>(file);

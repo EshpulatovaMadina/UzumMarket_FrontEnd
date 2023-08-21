@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.BaseResponse;
 import com.example.model.SignInDTO;
 import com.example.model.UserCreateDTO;
 import com.example.model.UserResponseDTO;
