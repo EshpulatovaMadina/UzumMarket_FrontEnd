@@ -27,9 +27,6 @@ public class CategoryController {
                     @RequestParam(required = false ) UUID parentId,
                     @RequestParam File img
             ) {
-//        if(parentId.equals("null")){
-//            parentId = null;
-//        }
         categoryService.save(name, parentId, img);
         return "/admin/menu";
     }
@@ -49,7 +46,7 @@ public class CategoryController {
                 return "user/category";
             }
             case "ADMIN" -> {
-                return "admin/category";
+                return "first-category";
             }
             case "SELLER" -> {
                 return "seller/category";
@@ -76,7 +73,7 @@ public class CategoryController {
                 return "user/category";
             }
             case "ADMIN" -> {
-                return "admin/category";
+                return "first-category";
             }
             case "SELLER" -> {
                 return "seller/category";

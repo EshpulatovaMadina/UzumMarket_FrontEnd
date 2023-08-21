@@ -22,35 +22,37 @@ public class UserService {
 
     public String createUser(UserCreateDTO dto) {
         HttpEntity<UserCreateDTO> userDTO= new  HttpEntity<>(dto);
-        ResponseEntity<UserResponseDTO> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
                 backendHost + "/user/add",
                 HttpMethod.POST,
                 userDTO,
-                UserResponseDTO.class);
-        System.out.println("exchange.getBody() = " + exchange.getBody());
+                BaseResponse.class
+
+        );
+        System.out.println("exchange.getBody() = " + exchange.getBody().getData());
 
         return "success";
     }
 
     public UserResponseDTO signIn(SignInDTO dto) {
         HttpEntity<SignInDTO> dtoHttpEntity = new HttpEntity<>(dto);
-        ResponseEntity<UserResponseDTO> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
                 backendHost + "/user/sign-in",
                 HttpMethod.POST,
                 dtoHttpEntity,
-                UserResponseDTO.class
+                BaseResponse.class
         );
-        return exchange.getBody();
+        return (UserResponseDTO) exchange.getBody().getData();
     }
 
     public UserResponseDTO getById(UUID Id) {
         HttpEntity<UUID> userId =  new HttpEntity<>(Id);
-        ResponseEntity<UserResponseDTO> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
                 backendHost + "/user/get-by-id",
                 HttpMethod.POST,
                 userId,
-                UserResponseDTO.class
+                BaseResponse.class
         );
-        return exchange.getBody();
+        return (UserResponseDTO) exchange.getBody().getData();
     }
 }

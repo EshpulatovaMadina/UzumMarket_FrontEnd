@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.example.dto.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,11 +24,11 @@ public class AttachmentService {
 
     public UUID create(File file){
         HttpEntity<File> fileHttpEntity = new HttpEntity<>(file);
-        ResponseEntity<UUID> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
                 backendHost + "/image/single-upload",
                 HttpMethod.POST,
                 fileHttpEntity,
-                UUID.class
+                BaseResponse.class
         );
         return exchange.getBody();
     }
