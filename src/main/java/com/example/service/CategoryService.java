@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.BaseResponse;
 import com.example.model.CategoryCreateDTO;
 import com.example.model.CategoryResponseDTO;
 import com.example.model.ProductResponseDTO;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -31,30 +34,35 @@ public class CategoryService {
 
         HttpEntity<CategoryCreateDTO> dtoHttpEntity = new HttpEntity<>(dto);
 
-        ResponseEntity<CategoryResponseDTO> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
                 backendHost + "/category/create",
                 HttpMethod.POST,
                 dtoHttpEntity,
-                CategoryResponseDTO.class
+                BaseResponse.class
         );
-        if (exchange.getBody() != null) {
+        if (Objects.requireNonNull(exchange.getBody()).getData() != null) {
             return "saved";
         }
         return "wrong";
     }
 
     public Page<CategoryResponseDTO> getFirstCategories() {
-        return null;
+        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+                backendHost + "/category/first",
+                HttpMethod.POST,
+                null,
+                BaseResponse.class
+        );
+        return (Page<CategoryResponseDTO>) exchange.getBody().getData();
     }
 
     public Page<CategoryResponseDTO> getSubCategories(UUID parentId) {
-        ResponseEntity<Page<CategoryResponseDTO>> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
                 backendHost + "/subCategories/" + parentId,
                 HttpMethod.POST,
                 null,
-                new ParameterizedTypeReference<Page<CategoryResponseDTO>>() {
-                } // Parametrizatsiya turi
+                BaseResponse.class
         );
-        return exchange.getBody();
+        return (Page<CategoryResponseDTO>) exchange.getBody().getData();
     }
 }
