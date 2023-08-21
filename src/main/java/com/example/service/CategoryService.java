@@ -11,7 +11,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.UUID;
@@ -23,6 +25,7 @@ public class CategoryService {
     @Value("${backend.host}")
     private String backendHost;
     private final AttachmentService attachmentService;
+
 
     public String save(String name, UUID parentId, File file) {
         UUID uuid = attachmentService.create(file);
