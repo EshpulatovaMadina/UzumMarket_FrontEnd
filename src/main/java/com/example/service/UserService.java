@@ -1,17 +1,21 @@
 package com.example.service;
 
 import com.example.dto.BaseResponse;
+import com.example.model.ProductResponseDTO;
 import com.example.model.SignInDTO;
 import com.example.model.UserCreateDTO;
 import com.example.model.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -23,12 +27,11 @@ public class UserService {
 
     public String createUser(UserCreateDTO dto) {
         HttpEntity<UserCreateDTO> userDTO= new  HttpEntity<>(dto);
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse<UserResponseDTO>> exchange = restTemplate.exchange(
                 backendHost + "/user/add",
                 HttpMethod.POST,
                 userDTO,
-                BaseResponse.class
-
+                new ParameterizedTypeReference<BaseResponse<UserResponseDTO>>() {}
         );
         System.out.println("exchange.getBody() = " + exchange.getBody().getData());
 
@@ -37,22 +40,35 @@ public class UserService {
 
     public UserResponseDTO signIn(SignInDTO dto) {
         HttpEntity<SignInDTO> dtoHttpEntity = new HttpEntity<>(dto);
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+
+//        ResponseEntity<BaseResponse<UserResponseDTO>> entity = restTemplate.postForEntity(
+//                backendHost + "/user/sign-in",
+//                dtoHttpEntity,
+//                new ParameterizedTypeReference<BaseResponse<UserResponseDTO>>() {}
+//        );
+        /**ResponseEntity<BaseResponse<UserResponseDTO>> exchange = restTemplate.exchange(
+         backendHost + "/user/sign-in",
+         HttpMethod.POST,
+         dtoHttpEntity,
+         new ParameterizedTypeReference<BaseResponse<UserResponseDTO>>() {}
+         );*/
+
+        ResponseEntity<BaseResponse<UserResponseDTO>> exchange = restTemplate.exchange(
                 backendHost + "/user/sign-in",
                 HttpMethod.POST,
                 dtoHttpEntity,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<UserResponseDTO>>() {}
         );
-        return (UserResponseDTO) exchange.getBody().getData();
+        return (UserResponseDTO) Objects.requireNonNull(exchange.getBody()).getData();
     }
 
     public UserResponseDTO getById(UUID Id) {
         HttpEntity<UUID> userId =  new HttpEntity<>(Id);
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse<UserResponseDTO>> exchange = restTemplate.exchange(
                 backendHost + "/user/get-by-id",
                 HttpMethod.POST,
                 userId,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<UserResponseDTO>>() {}
         );
         return (UserResponseDTO) exchange.getBody().getData();
     }

@@ -1,32 +1,44 @@
 package com.example.controller;
 
 import com.example.model.CategoryResponseDTO;
+import com.example.model.ProductResponseDTO;
 import com.example.model.UserResponseDTO;
 import com.example.service.CategoryService;
+import com.example.service.ProductService;
 import com.example.service.UserService;
+import jakarta.servlet.annotation.MultipartConfig;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/category")
 @RequiredArgsConstructor
+@MultipartConfig(maxFileSize = 5000000, maxRequestSize = 20, fileSizeThreshold = 1024)
 public class CategoryController {
     private final CategoryService categoryService;
     private final UserService userService;
+    private final ProductService productService;
 
     @PostMapping("/create")
     public String create
             (
                     @RequestParam String name,
                     @RequestParam(required = false ) UUID parentId,
-                    @RequestParam File img
+                    @RequestParam MultipartFile img,
+                    @RequestParam UUID userId,
+                    Model model
             ) {
+        UserResponseDTO user = userService.getById(userId);
+        model.addAttribute("user",user);
         categoryService.save(name, parentId, img);
         return "/admin/menu";
     }
@@ -37,7 +49,7 @@ public class CategoryController {
             Model model
     ) {
         UserResponseDTO user = userService.getById(userId);
-        Page<CategoryResponseDTO> responseDTOS = categoryService.getFirstCategories();
+        List<CategoryResponseDTO> responseDTOS = categoryService.getFirstCategories();
         model.addAttribute("categories", responseDTOS);
         model.addAttribute("user", user);
         model.addAttribute("parentId",null);
@@ -46,7 +58,7 @@ public class CategoryController {
                 return "user/category";
             }
             case "ADMIN" -> {
-                return "first-category";
+                return "admin/first-category";
             }
             case "SELLER" -> {
                 return "seller/category";
@@ -64,7 +76,7 @@ public class CategoryController {
             Model model
     ) {
         UserResponseDTO user = userService.getById(userId);
-        Page<CategoryResponseDTO> responseDTOS = categoryService.getSubCategories(categoryId);
+        List<CategoryResponseDTO> responseDTOS = categoryService.getSubCategories(categoryId);
         model.addAttribute("categories", responseDTOS);
         model.addAttribute("user", user);
         model.addAttribute("parentId",categoryId);
@@ -73,9 +85,15 @@ public class CategoryController {
                 return "user/category";
             }
             case "ADMIN" -> {
-                return "first-category";
+                return "admin/sub-category";
             }
             case "SELLER" -> {
+                if(responseDTOS.isEmpty()){
+                    List<ProductResponseDTO> products = productService.getAll(userId,categoryId);
+                    model.addAttribute("products",products);
+                    model.addAttribute("msg",null);
+                    return "seller/products";
+                }
                 return "seller/category";
             }
             default -> {
