@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Category</title>
+</head>
+        <body>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr th:each="category : ${categories}">
+            <!--                 <a th:href="@{/category/get/{userId}/{categoryId}(userId=${userId}, categoryId=${categoryId})}">View Category</a>-->
+
+            <a th:href="@{/category/sub/{userId}/{categoryId}(userId=${user.id}, categoryId=${category.id})}"
+               th:text="${category.name}"></a>
+            <img width="30px" height="30px" style="border-radius: 100px;" th:src="${'http://localhost:8081/image/download/'+category.getPhotoId()}">
+            <!--               <td th:text="${catedory.name}"></td>-->
+            <!--               xullas shu yerda rasm chiqishi kk-->
+          </tr>
+
+          </tbody>
+        </table>
+        </body>
+</html>

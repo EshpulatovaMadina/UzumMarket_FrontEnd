@@ -4,24 +4,49 @@
     <meta charset="UTF-8">
     <title>Products</title>
 </head>
-         <body>
-         <a th:href="@{/category/get/{userId}(userId=${user.id})}">View Categories</a>
+         <body th:onload="showMessage(${msg})">
 
+         <form action="/product/create" method="post" enctype="multipart/form-data">
+             <input type="text" name="name" placeholder="name">
+             <input type="text" name="description" placeholder="description">
+             <input type="number" name="price" placeholder="price">
+             <input type="number" name="count" placeholder="count">
+             <label for="img">Select image for product:</label>
+             <input type="file" id="img" name="image" accept="image/*" multiple>
+             <input type="hidden" name="sellerId" th:value="${user.id}">
+             <input type="hidden" name="categoryId" th:value="${parentId}">
+             <br/>
+             <button type="submit">Submit</button>
+         </form>
          <table>
              <thead>
              <tr>
-                 <th>ID</th>
+<!--                 <th>ID</th>-->
                  <th>Name</th>
                  <th>Price</th>
+                 <th>Picture</th>
              </tr>
              </thead>
              <tbody>
              <tr th:each="product : ${products}">
                  <td th:text="${product.name}"></td>
-                 <td th:text="${product.name}"></td>
+<!--                 <td th:text="${product.name}"></td>-->
                  <td th:text="${product.price}"></td>
+                 <td>
+                     <img th:each="photo : ${product.getPhotos()}" th:src="${'http://localhost:8081/image/download/'+photo}">
+                 </td>
              </tr>
              </tbody>
          </table>
+
+
+         <script>
+             function showMessage(saveValue) {
+                 if (saveValue === null) {
+                    alert('No problem')
+                 }
+                     alert(saveValue);
+             }
+         </script>
          </body>
 </html>
