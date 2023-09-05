@@ -47,7 +47,7 @@ public class ProductService {
                     dtoHttpEntity,
                     new ParameterizedTypeReference<BaseResponse<ProductResponseDTO>>() {}
             );
-            return "created";
+            return null;
         }catch (HttpStatusCodeException e ) {
 
             DataAlreadyExistsException response = e.getResponseBodyAs(DataAlreadyExistsException.class);
@@ -72,13 +72,27 @@ public class ProductService {
         return exchange.getBody().getData();
     }
 
-    public List<ProductResponseDTO> getAllByCategory(UUID sellerId , UUID categoryId) {
+    public List<ProductResponseDTO> getAllByCategory( UUID categoryId) {
         ResponseEntity<BaseResponse<List<ProductResponseDTO>>> exchange = restTemplate.exchange(
-                backendHost + "/product/get-by-category/" + categoryId +"/"+sellerId,
+                backendHost + "/product/get-by-category/" + categoryId,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<BaseResponse<List<ProductResponseDTO>>>() {}
                 );
+        return exchange.getBody().getData();
+    }
+
+    public List<ProductResponseDTO> search(String word) {
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(backendHost + "/product/search")
+                .queryParam("word", word);
+
+        ResponseEntity<BaseResponse<List<ProductResponseDTO>>> exchange = restTemplate.exchange(
+                uriBuilder.toUriString(),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<BaseResponse<List<ProductResponseDTO>>>() {
+                }
+        );
         return exchange.getBody().getData();
     }
 }
