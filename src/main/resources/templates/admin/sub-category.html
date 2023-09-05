@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sub categories</title>
+</head>
+       <body>
+
+       <form action="/category/create" method="post" enctype="multipart/form-data">
+           <input type="text" name="name" placeholder="name">
+           <span th:if="${parentId != null}">
+                   <input type="hidden" name="parentId" th:value="${parentId}">
+               </span>
+           <br/>
+
+           <label for="img">Select image for category:</label>
+           <input type="file" id="img" name="img" accept="image/*">
+           <input type="hidden" name="userId" th:value="${user.id}">
+           <br/>
+           <button type="submit">Submit</button>
+       </form>
+
+       <table>
+           <thead>
+           <tr>
+               <th>Name</th>
+           </tr>
+           </thead>
+           <tbody>
+
+           <tr th:each="category : ${categories}">
+               <!--                 <a th:href="@{/category/get/{userId}/{categoryId}(userId=${userId}, categoryId=${categoryId})}">View Category</a>-->
+
+               <a th:href="@{/category/sub/{userId}/{categoryId}(userId=${user.id}, categoryId=${category.id})}"
+                  th:text="${category.name}"></a>
+               <img width="30px" height="30px" style="border-radius: 100px;" th:src="${'http://localhost:8081/image/download/'+category.getPhotoId()}">
+               <!--               <td th:text="${catedory.name}"></td>-->
+               <!--               xullas shu yerda rasm chiqishi kk-->
+           </tr>
+
+           </tbody>
+       </table>
+       </body>
+</html>

@@ -4,6 +4,7 @@ import com.example.dto.BaseResponse;
 import com.example.model.CategoryCreateDTO;
 import com.example.model.CategoryResponseDTO;
 import com.example.model.ProductResponseDTO;
+import com.example.model.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -30,7 +31,7 @@ public class CategoryService {
     private final AttachmentService attachmentService;
 
 
-    public String save(String name, UUID parentId, File file) {
+    public String save(String name, UUID parentId, MultipartFile file) {
         UUID uuid = attachmentService.create(file);
 //        attachmentService.download(uuid);
         CategoryCreateDTO dto = new CategoryCreateDTO(name, uuid, parentId, true);
@@ -49,23 +50,23 @@ public class CategoryService {
         return "wrong";
     }
 
-    public Page<CategoryResponseDTO> getFirstCategories() {
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+    public List<CategoryResponseDTO> getFirstCategories() {
+        ResponseEntity<BaseResponse<List<CategoryResponseDTO>>> exchange = restTemplate.exchange(
                 backendHost + "/category/first",
-                HttpMethod.POST,
+                HttpMethod.GET,
                 null,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<List<CategoryResponseDTO>>>() {}
         );
-        return (Page<CategoryResponseDTO>) exchange.getBody().getData();
+        return exchange.getBody().getData();
     }
 
-    public Page<CategoryResponseDTO> getSubCategories(UUID parentId) {
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
-                backendHost + "/subCategories/" + parentId,
-                HttpMethod.POST,
+    public List<CategoryResponseDTO> getSubCategories(UUID parentId) {
+        ResponseEntity<BaseResponse<List<CategoryResponseDTO>>> exchange = restTemplate.exchange(
+                backendHost + "/category/sub/" + parentId,
+                HttpMethod.GET,
                 null,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<List<CategoryResponseDTO>>>() {}
         );
-        return (Page<CategoryResponseDTO>) exchange.getBody().getData();
+        return (List<CategoryResponseDTO>) exchange.getBody().getData();
     }
 }
