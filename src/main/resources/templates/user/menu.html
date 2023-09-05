@@ -6,8 +6,9 @@
     <link href="templates\styles\modal.css">
 </head>
 <body>
+<a th:href="@{/category/first/{userId}(userId=${user.id})}">Products</a>
 
-<a href="/category/get">Categories</a>
+<a href="/category/first/">Categories</a>
 <a href="/basket/get">My basket</a>
 <a href="/order/get">Order</a>
 <br/>
