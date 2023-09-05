@@ -6,11 +6,11 @@
 </head>
 <body>
 
-<form action="/category/create" method="post" enctype="multipart/form-data">
-    <input type="text" name="name" placeholder="name">
+<form th:action="@{/category/create/{userId}(userId=${user.id})}" method="post" enctype="multipart/form-data">
+    <input type="text" th:name="name" name="name" placeholder="name">
     <span th:if="${parentId != null}">
-                   <input type="hidden" name="parentId" th:value="${parentId}">
-               </span>
+          <input type="hidden" th:name="parentId" th:value="${parentId}">
+    </span>
     <br/>
 
     <label for="img">Select image for category:</label>

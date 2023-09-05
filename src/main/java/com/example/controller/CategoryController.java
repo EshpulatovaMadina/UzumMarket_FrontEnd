@@ -9,8 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 @Controller
@@ -20,15 +22,26 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final UserService userService;
 
-    @PostMapping("/create")
+    @PostMapping("/create/{userId}")
     public String create
             (
-                    @RequestParam String name,
+                    @RequestParam(name = "name") String name,
                     @RequestParam(required = false ) UUID parentId,
-                    @RequestParam File img
-            ) {
+                    @RequestParam MultipartFile img,
+                    @PathVariable UUID userId,
+                    Model model
+            ) throws IOException {
+        UserResponseDTO user = userService.getById(userId);
+        model.addAttribute("user",user);
         categoryService.save(name, parentId, img);
         return "/admin/menu";
+    }
+    @GetMapping("/get/{userId}")
+    public String get(Model model, @PathVariable UUID userId){
+        model.addAttribute("parentId",null);
+        UserResponseDTO user = userService.getById(userId);
+        model.addAttribute("user", user);
+        return "admin/first-category";
     }
 
     @GetMapping("/first/{userId}")

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Menu</title>
@@ -7,9 +7,9 @@
 </head>
 <body>
 
-<a href="/category/get">Categories</a>
-<a href="/basket/get">My basket</a>
-<a href="/order/get">Order</a>
+<a th:href="@{/category/get/{userId}(userId=${user.id})}">Categories</a>
+<a th:href="@{/basket/get/{userId}(userId=${user.id})}">My basket</a>
+<a th:href="@{/order/get/{userId}(userId=${user.id})}">Order</a>
 <br/>
 <a id="openProfileModal">Profile</a> <!-- Changed ID to openProfileModal -->
 <form action="/product/search">

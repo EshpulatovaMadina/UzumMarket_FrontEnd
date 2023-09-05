@@ -40,7 +40,6 @@ public class UserController {
                     @ModelAttribute SignInDTO dto,
                     Model model
             )
-
     {
         UserResponseDTO userResponseDTO = userService.signIn(dto);
         if(userResponseDTO == null){

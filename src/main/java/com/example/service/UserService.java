@@ -6,6 +6,7 @@ import com.example.model.UserCreateDTO;
 import com.example.model.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,14 @@ public class UserService {
     @Value("${backend.host}")
     private String backendHost;
 
+
     public String createUser(UserCreateDTO dto) {
         HttpEntity<UserCreateDTO> userDTO= new  HttpEntity<>(dto);
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse<UserResponseDTO>> exchange = restTemplate.exchange(
                 backendHost + "/user/add",
                 HttpMethod.POST,
                 userDTO,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<UserResponseDTO>>() {}
 
         );
         System.out.println("exchange.getBody() = " + exchange.getBody().getData());
@@ -37,22 +39,22 @@ public class UserService {
 
     public UserResponseDTO signIn(SignInDTO dto) {
         HttpEntity<SignInDTO> dtoHttpEntity = new HttpEntity<>(dto);
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse<UserResponseDTO>> exchange = restTemplate.exchange(
                 backendHost + "/user/sign-in",
                 HttpMethod.POST,
                 dtoHttpEntity,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<UserResponseDTO>>() {}
         );
         return (UserResponseDTO) exchange.getBody().getData();
     }
 
     public UserResponseDTO getById(UUID Id) {
         HttpEntity<UUID> userId =  new HttpEntity<>(Id);
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse<UserResponseDTO>> exchange = restTemplate.exchange(
                 backendHost + "/user/get-by-id",
                 HttpMethod.POST,
                 userId,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<UserResponseDTO>>() {}
         );
         return (UserResponseDTO) exchange.getBody().getData();
     }

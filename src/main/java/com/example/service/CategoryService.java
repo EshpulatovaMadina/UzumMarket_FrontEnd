@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,18 +33,18 @@ public class CategoryService {
     private final AttachmentService attachmentService;
 
 
-    public String save(String name, UUID parentId, File file) {
+    public String save(String name, UUID parentId, MultipartFile file) throws IOException {
         UUID uuid = attachmentService.create(file);
 //        attachmentService.download(uuid);
         CategoryCreateDTO dto = new CategoryCreateDTO(name, uuid, parentId, true);
 
         HttpEntity<CategoryCreateDTO> dtoHttpEntity = new HttpEntity<>(dto);
 
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse<CategoryResponseDTO>> exchange = restTemplate.exchange(
                 backendHost + "/category/create",
                 HttpMethod.POST,
                 dtoHttpEntity,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<CategoryResponseDTO>>() {}
         );
         if (Objects.requireNonNull(exchange.getBody()).getData() != null) {
             return "saved";
@@ -49,14 +52,15 @@ public class CategoryService {
         return "wrong";
     }
 
-    public Page<CategoryResponseDTO> getFirstCategories() {
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+    public PageImpl<CategoryResponseDTO> getFirstCategories() {
+        ResponseEntity<BaseResponse<List<CategoryResponseDTO>>>exchange = restTemplate.exchange(
                 backendHost + "/category/first",
-                HttpMethod.POST,
+                HttpMethod.GET,
                 null,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<List<CategoryResponseDTO>>>() {}
         );
-        return (Page<CategoryResponseDTO>) exchange.getBody().getData();
+        System.out.println("exchange.getBody() = " + exchange.getBody());
+        return new PageImpl<>(Collections.emptyList());
     }
 
     public Page<CategoryResponseDTO> getSubCategories(UUID parentId) {
