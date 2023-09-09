@@ -89,6 +89,12 @@ public class CategoryController {
         model.addAttribute("parentId",categoryId);
         switch (user.getUserRole()) {
             case "USER"-> {
+                if(responseDTOS.isEmpty()){
+                    List<ProductResponseDTO> products = productService.getAll(userId,categoryId);
+                    model.addAttribute("products",products);
+                    model.addAttribute("msg",null);
+                    return "user/products";
+                }
                 return "user/category";
             }
             case "ADMIN" -> {

@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
@@ -40,5 +37,15 @@ public class ProductController {
         model.addAttribute("user",userService.getById(dto.getSellerId()));
         model.addAttribute("msg", msg);
         return "seller/products";
+    }
+
+    @GetMapping("search")
+    public String search(
+            @RequestParam String word,
+            Model model) {
+        List<ProductResponseDTO> responseDTOS = productService.search(word);
+        model.addAttribute("products",responseDTOS);
+        model.addAttribute("msg",null);
+        return "user/products";
     }
 }

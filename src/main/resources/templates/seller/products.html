@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Products</title>
 </head>
-         <body th:onload="showMessage(${msg})">
+         <body onload="showMessage()">
 
          <form action="/product/create" method="post" enctype="multipart/form-data">
              <input type="text" name="name" placeholder="name">
@@ -40,12 +40,14 @@
          </table>
 
 
-         <script>
-             function showMessage(saveValue) {
-                 if (saveValue === null) {
-                    alert('No problem')
+         <script th:inline="javascript">
+             var msg = [[${msg}]];
+
+             function showMessage() {
+                 if (msg === null) {
+                    return;
                  }
-                     alert(saveValue);
+                     alert(msg);
              }
          </script>
          </body>
