@@ -6,24 +6,24 @@
 </head>
    <body>
    <table>
-     <thead>
-     <tr>
-       <!--                 <th>ID</th>-->
-       <th>Name</th>
-       <th>Price</th>
-       <th>Picture</th>
-     </tr>
-     </thead>
-     <tbody>
-     <tr th:each="product : ${products}">
-       <td th:text="${product.name}"></td>
-       <!--                 <td th:text="${product.name}"></td>-->
-       <td th:text="${product.price}"></td>
-       <td>
-         <img th:each="photo : ${product.getPhotos()}" th:src="${'http://localhost:8081/image/download/'+photo}">
-       </td>
-     </tr>
-     </tbody>
+       <thead>
+       <tr>
+           <!--                 <th>ID</th>-->
+           <th>Name</th>
+           <th>Price</th>
+           <th>Picture</th>
+       </tr>
+       </thead>
+       <tbody>
+       <tr th:each="product : ${products}">
+           <td th:text="${product.name}"></td>
+           <!--                 <td th:text="${product.name}"></td>-->
+           <td th:text="${product.price}"></td>
+           <td>
+               <img th:each="photo : ${product.getPhotos()}" th:src="${'http://localhost:8081/image/download/'+photo}">
+           </td>
+       </tr>
+       </tbody>
    </table>
    </body>
 </html>
