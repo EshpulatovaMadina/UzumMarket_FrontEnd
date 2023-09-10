@@ -1,10 +1,9 @@
 package com.example.service;
 
 import com.example.dto.BaseResponse;
-import com.example.model.ProductResponseDTO;
-import com.example.model.SignInDTO;
-import com.example.model.UserCreateDTO;
-import com.example.model.UserResponseDTO;
+import com.example.model.ResponceDTO.SignInDTO;
+import com.example.model.CreateDTO.UserCreateDTO;
+import com.example.model.ResponceDTO.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 

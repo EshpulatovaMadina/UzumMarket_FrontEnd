@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.ResponceDTO;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
