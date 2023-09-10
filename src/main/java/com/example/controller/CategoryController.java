@@ -1,21 +1,19 @@
 package com.example.controller;
 
-import com.example.model.CategoryResponseDTO;
-import com.example.model.ProductResponseDTO;
-import com.example.model.UserResponseDTO;
+import com.example.model.ResponceDTO.CategoryResponseDTO;
+import com.example.model.ResponceDTO.ProductResponseDTO;
+import com.example.model.ResponceDTO.UserResponseDTO;
 import com.example.service.CategoryService;
 import com.example.service.ProductService;
 import com.example.service.UserService;
 import jakarta.servlet.annotation.MultipartConfig;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +39,13 @@ public class CategoryController {
         model.addAttribute("user",user);
         categoryService.save(name, parentId, img);
         return "/admin/menu";
+    }
+    @GetMapping("/get/{userId}")
+    public String get(Model model, @PathVariable UUID userId){
+        model.addAttribute("parentId",null);
+        UserResponseDTO user = userService.getById(userId);
+        model.addAttribute("user", user);
+        return "admin/first-category";
     }
 
     @GetMapping("/first/{userId}")

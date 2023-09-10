@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basket</title>
+
+
+</head>
+<body>
+<th:block th:if="${basket == null}">
+    <p>Your basket is not present</p>
+    </th:block>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        <h1>MY basket</h1>
+
+<div th:if="${basket!=null}">
+        <tr  th:each="product : ${basket.getProducts()}">
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td>
+                <form action="/updateCount/{productId}" method="PUT">
+                    <button type="button" onclick="increaseCount(this)">➕</button>
+                    <span th:text="${product.getCount()}"></span>
+                    <button type="button" onclick="decreaseCount(this)">➖</button>
+                </form>
+            </td>
+        </tr>
+</div>
+
+        </tbody>
+    </table>
+
+
+
+
+<script>
+    function increaseCount(button) {
+        var countSpan = button.nextSibling.nextSibling;
+        var currentCount = parseInt(countSpan.innerText);
+        countSpan.innerText = currentCount + 1;
+    }
+
+    function decreaseCount(button) {
+        var countSpan = button.nextSibling;
+        var currentCount = parseInt(countSpan.innerText);
+        if (currentCount > 0) {
+            countSpan.innerText = currentCount - 1;
+        }
+    }
+
+</script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 package com.example.controller;
 
-import com.example.model.SignInDTO;
-import com.example.model.UserCreateDTO;
-import com.example.model.UserResponseDTO;
+import com.example.model.ResponceDTO.SignInDTO;
+import com.example.model.CreateDTO.UserCreateDTO;
+import com.example.model.ResponceDTO.UserResponseDTO;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -40,7 +40,6 @@ public class UserController {
                     @ModelAttribute SignInDTO dto,
                     Model model
             )
-
     {
         UserResponseDTO userResponseDTO = userService.signIn(dto);
         if(userResponseDTO == null){

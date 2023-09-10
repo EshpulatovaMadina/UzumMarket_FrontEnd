@@ -2,30 +2,20 @@ package com.example.service;
 
 import com.example.dto.BaseResponse;
 import com.example.exception.DataAlreadyExistsException;
-import com.example.model.CategoryResponseDTO;
-import com.example.model.ProductCreateDTO;
-import com.example.model.ProductResponseDTO;
-import com.example.model.RestResponsePage;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.model.CreateDTO.ProductCreateDTO;
+import com.example.model.ResponceDTO.ProductResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.asm.TypeReference;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.support.PagedListHolder;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -92,6 +82,16 @@ public class ProductService {
                 null,
                 new ParameterizedTypeReference<BaseResponse<List<ProductResponseDTO>>>() {
                 }
+        );
+        return exchange.getBody().getData();
+    }
+
+    public ProductResponseDTO getById(UUID productId) {
+        ResponseEntity<BaseResponse<ProductResponseDTO>> exchange = restTemplate.exchange(
+                backendHost + "/product/getById/" + productId,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<BaseResponse<ProductResponseDTO>>() {}
         );
         return exchange.getBody().getData();
     }

@@ -1,23 +1,18 @@
 package com.example.service;
 
 import com.example.dto.BaseResponse;
-import com.example.model.CategoryCreateDTO;
-import com.example.model.CategoryResponseDTO;
-import com.example.model.ProductResponseDTO;
-import com.example.model.UserResponseDTO;
+import com.example.model.CreateDTO.CategoryCreateDTO;
+import com.example.model.ResponceDTO.CategoryResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;

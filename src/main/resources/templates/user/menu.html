@@ -8,8 +8,13 @@
 <body>
 <a th:href="@{/category/first/{userId}(userId=${user.id})}">Products</a>
 
-<a href="/category/first/">Categories</a>
-<a href="/basket/get">My basket</a>
+<a th:href="@{/category/first/{userId}(userId=${user.id})}">Categories</a>
+<form action="/basket/basketsOfUser">
+<input type="hidden" th:name="userId" th:value="${user.id}"/>
+    <button type="submit">My basket</button>
+</form>
+
+
 <a href="/order/get">Order</a>
 <br/>
 <a id="openProfileModal">Profile</a> <!-- Changed ID to openProfileModal -->
