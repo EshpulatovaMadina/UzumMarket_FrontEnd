@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,16 +27,15 @@ public class BasketService {
     @Value("${backend.host}")
     private String backendHost;
 
-    public String create(BasketCreateDTO dto){
-        BasketCreateDTO basketCreateDTO = new BasketCreateDTO(dto.getUserId(), dto.getProductId(), dto.getCount());
-
+    public String create(UUID productId, UUID userId){
+        BasketCreateDTO basketCreateDTO = new BasketCreateDTO(userId, productId,1);
         HttpEntity<BasketCreateDTO> dtoHttpEntity = new HttpEntity<>(basketCreateDTO);
 
-        ResponseEntity<BaseResponse> exchange = restTemplate.exchange(
+        ResponseEntity<BaseResponse<BasketResponseDTO>> exchange = restTemplate.exchange(
                 backendHost + "/basketController/add",
                 HttpMethod.POST,
                 dtoHttpEntity,
-                BaseResponse.class
+                new ParameterizedTypeReference<BaseResponse<BasketResponseDTO>>() {}
         );
         if (Objects.requireNonNull(exchange.getBody()).getData() != null) {
             return "saved";
