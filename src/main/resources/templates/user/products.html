@@ -5,16 +5,22 @@
     <title>Products</title>
 </head>
    <body>
+   <th:block th:if="${#lists.isEmpty(products)}">
+       <h1>No products</h1>
+   </th:block>
+   <th:block th:unless="${#lists.isEmpty(products)}">
+
    <table>
        <thead>
        <tr>
-           <!--                 <th>ID</th>-->
            <th>Name</th>
            <th>Price</th>
            <th>Picture</th>
+           <th>Add basket</th>
        </tr>
        </thead>
        <tbody>
+
 
        <tr th:each="product : ${products}">
 
@@ -39,8 +45,8 @@
                <button type="submit">Add basket</button>
            </form>
        </tr>
-
        </tbody>
    </table>
+   </th:block>
    </body>
 </html>
