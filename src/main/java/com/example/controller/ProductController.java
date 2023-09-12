@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,8 +31,7 @@ public class ProductController {
     public String create(
                     @RequestParam("image") MultipartFile [] file,
                     @ModelAttribute ProductCreateDTO dto,
-                    Model model)
-             {
+                    Model model) throws IOException {
                  BaseResponse<List<UUID>> list = attachmentService.multipleUpload( file);
                  dto.setPhotos(list.getData());
                  String msg = productService.create(dto);
