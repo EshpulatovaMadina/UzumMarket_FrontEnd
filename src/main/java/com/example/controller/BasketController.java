@@ -21,10 +21,11 @@ public class BasketController {
 
     @PostMapping("/create")
     public String create(
-            @ModelAttribute BasketCreateDTO dto,
+            @RequestParam UUID productId,
+            @RequestParam UUID userId,
             Model model) {
-        String s = basketService.create(dto);
-        model.addAttribute("baskets", basketService.basketsOfUser(dto.getUserId()));
+        String s = basketService.create(productId,userId);
+        model.addAttribute("baskets", basketService.basketsOfUser(userId));
         if (Objects.equals(s, "saved")) {
             return "/user/basket";
         } else {

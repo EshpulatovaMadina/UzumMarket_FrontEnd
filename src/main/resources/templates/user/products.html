@@ -20,18 +20,31 @@
        </tr>
        </thead>
        <tbody>
-       <!-- Shartni tekshirish -->
 
-       <!-- Agar products ro'yxati bo'sh bo'lmasa -->
-           <tr th:each="product : ${products}">
-               <td th:text="${product.name}"></td>
-               <td th:text="${product.price}"></td>
-               <td>
-                   <img th:each="photo : ${product.getPhotos()}" th:src="${'http://localhost:8081/image/download/'+photo}">
-               </td>
-               <td></td>
-           </tr>
 
+       <tr th:each="product : ${products}">
+
+           <td th:text="${product.name}">
+               <form th:action="@{/product/getById}" method="get">
+                   <input type="hidden" name="productId" th:value="${product.id}">
+                   <input type="hidden" name="userId" th:value="${userId}">
+                   <button type="submit">
+                       <span th:text="${product.name}"></span>
+                   </button>
+               </form>
+           </td>
+           <!--                 <td th:text="${product.name}"></td>-->
+           <td th:text="${product.price}"></td>
+           <td>
+               <img th:each="photo : ${product.getPhotos()}" th:src="${'http://localhost:8081/image/download/'+photo}">
+           </td>
+
+           <form th:action="@{/basket/create}" method="post">
+               <input type="hidden" name="productId" th:value="${product.id}">
+               <input type="hidden" name="userId" th:value="${userId}">
+               <button type="submit">Add basket</button>
+           </form>
+       </tr>
        </tbody>
    </table>
    </th:block>
