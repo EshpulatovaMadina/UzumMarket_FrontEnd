@@ -5,25 +5,35 @@
     <title>Products</title>
 </head>
    <body>
+   <th:block th:if="${#lists.isEmpty(products)}">
+       <h1>No products</h1>
+   </th:block>
+   <th:block th:unless="${#lists.isEmpty(products)}">
+
    <table>
        <thead>
        <tr>
-           <!--                 <th>ID</th>-->
            <th>Name</th>
            <th>Price</th>
            <th>Picture</th>
+           <th>Add basket</th>
        </tr>
        </thead>
        <tbody>
-       <tr th:each="product : ${products}">
-           <td th:text="${product.name}"></td>
-           <!--                 <td th:text="${product.name}"></td>-->
-           <td th:text="${product.price}"></td>
-           <td>
-               <img th:each="photo : ${product.getPhotos()}" th:src="${'http://localhost:8081/image/download/'+photo}">
-           </td>
-       </tr>
+       <!-- Shartni tekshirish -->
+
+       <!-- Agar products ro'yxati bo'sh bo'lmasa -->
+           <tr th:each="product : ${products}">
+               <td th:text="${product.name}"></td>
+               <td th:text="${product.price}"></td>
+               <td>
+                   <img th:each="photo : ${product.getPhotos()}" th:src="${'http://localhost:8081/image/download/'+photo}">
+               </td>
+               <td></td>
+           </tr>
+
        </tbody>
    </table>
+   </th:block>
    </body>
 </html>
