@@ -26,7 +26,7 @@ public class AttachmentService {
     @Value("${backend.host}")
     private String backendHost;
 
-    public UUID create(MultipartFile file)  {
+    public UUID create(MultipartFile file) {
         HttpEntity<MultipartFile> fileHttpEntity = new HttpEntity<>(file);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -40,7 +40,7 @@ public class AttachmentService {
                     return file.getOriginalFilename();
                 }
             });
-        }catch (IOException e){
+        } catch (IOException e) {
             return null;
         }
 
@@ -57,39 +57,32 @@ public class AttachmentService {
         System.out.println("exchange.getBody().getData() = " + exchange.getBody().getData());
         return UUID.fromString((String) exchange.getBody().getData());
     }
-    public BaseResponse<List<UUID>> multipleUpload(MultipartFile [] imgs) {
-        HttpEntity<MultipartFile[]> fileHttpEntity = new HttpEntity<>(imgs);
+
+    public BaseResponse<List<UUID>> multipleUpload(MultipartFile[] imgs) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        try {
-            for (MultipartFile img : imgs) {
-                body.add("files", new ByteArrayResource(img.getBytes()) {
-                    @Override
-                    public String getFilename() {
-                        return img.getOriginalFilename();
-                    }
-                });
-            }
-
-
-        } catch (IOException e) {
-            return null;
+        for (MultipartFile img : imgs) {
+            ByteArrayResource resource = new ByteArrayResource(img.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return img.getOriginalFilename();
+                }
+            };
+            body.add("files", resource);
         }
 
-
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-
-
-//        HttpEntity<MultipartFile> fileHttpEntity = new HttpEntity<>(imgs);
+        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<BaseResponse<List<UUID>>> exchange = restTemplate.exchange(
                 backendHost + "/image/multiple-upload",
                 HttpMethod.POST,
-                fileHttpEntity,
-                new ParameterizedTypeReference<BaseResponse<List<UUID>>>() {}
+                requestEntity,
+                new ParameterizedTypeReference<BaseResponse<List<UUID>>>() {
+                }
         );
         return exchange.getBody();
     }
+
 }
